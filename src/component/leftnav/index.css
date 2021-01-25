@@ -1,0 +1,12 @@
+.sidebar .logo {
+  height: 14rem;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.sidebar .logo .role {
+  color: dimgray;
+  font-size: 1.5rem;
+}
