@@ -20,7 +20,7 @@ export default class Homepage extends React.Component {
             <Main />
           </Content>
           <Footer style={{ textAlign: "center" }}>
-            ©2018 Created by Team Explorers
+            ©2021 Created by Team Explorers
           </Footer>
         </Layout>
       </Layout>
