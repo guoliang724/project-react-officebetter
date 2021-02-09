@@ -2,14 +2,14 @@ import React from "react";
 import { Button, Form, Input, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./index.css";
-import { getLogin } from "../../api/index";
+import { getLogin, reqWeather } from "../../api/index";
 const { Item } = Form;
 export default function Login(props) {
-  console.log(props);
   const handleSubmit = async (values) => {
-    const result = await getLogin();
-    console.log(result);
-    if (values.username === "admin" && values.password === "admin") {
+    const { loginId, loginPwd } = values;
+    const result = await getLogin(loginId, loginPwd);
+    reqWeather("calgary");
+    if (result.data.status === 1) {
       props.history.replace("/");
       message.success("Login Success!");
     } else {
@@ -23,7 +23,7 @@ export default function Login(props) {
         <h2>Login</h2>
         <Form onFinish={handleSubmit} autoComplete="off">
           <Item
-            name="username"
+            name="loginId"
             rules={[
               {
                 required: true,
@@ -38,7 +38,7 @@ export default function Login(props) {
             />
           </Item>
           <Item
-            name="password"
+            name="loginPwd"
             rules={[
               {
                 required: true,

@@ -4,11 +4,8 @@
 .header {
   background-color: white;
   padding-left: 0;
-}
-.header .logo {
-  margin-top: 10px;
-  width: 200px;
-  height: 50px;
-  background: url("../../assets/logo.png");
-  background-size: 200px 50px;
+  padding-right: 0;
+  height: 90px;
+  display: flex;
+  flex-direction: row;
 }

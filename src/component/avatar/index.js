@@ -5,6 +5,8 @@ import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 
 import "./index.css";
 
+const api = "/upload";
+
 function getBase64(img, callback) {
   const reader = new FileReader();
   reader.addEventListener("load", () => callback(reader.result));
@@ -46,7 +48,7 @@ export default class Avatar extends React.Component {
         listType="picture-card"
         className="avatar-uploader"
         showUploadList={false}
-        action=""
+        action={api}
         onChange={this.handleChange}
       >
         {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}

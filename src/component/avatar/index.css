@@ -1,3 +1,8 @@
 .ant-upload.ant-upload-select-picture-card {
   border-radius: 50px;
+  overflow: hidden;
+}
+.ant-upload.ant-upload-select-picture-card img {
+  width: 102px;
+  height: 102px;
 }

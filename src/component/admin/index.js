@@ -4,6 +4,7 @@ import Main from "../main";
 import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
 import "./index.css";
 import Leftnav from "../leftnav";
+import Head from "../head";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -16,8 +17,7 @@ export default class Homepage extends React.Component {
         </Sider>
         <Layout className="main-layout">
           <Header className="header">
-            <div className="logo"></div>
-            <div></div>
+            <Head />
           </Header>
           <Content className="content">
             <Main />
