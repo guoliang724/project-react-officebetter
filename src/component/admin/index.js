@@ -15,7 +15,10 @@ export default class Homepage extends React.Component {
           <Leftnav></Leftnav>
         </Sider>
         <Layout className="main-layout">
-          <Header className="header">Reitzel Insulation(logo)</Header>
+          <Header className="header">
+            <div className="logo"></div>
+            <div></div>
+          </Header>
           <Content className="content">
             <Main />
           </Content>
