@@ -3,6 +3,10 @@ import { Button, Form, Input, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./index.css";
 import { getLogin, reqWeather } from "../../api/index";
+import { setUser, getUser } from "../../util/storage";
+import Catch from "../../util/catch";
+import { Redirect } from "react-router-dom";
+
 const { Item } = Form;
 export default function Login(props) {
   const handleSubmit = async (values) => {
@@ -10,13 +14,18 @@ export default function Login(props) {
     const result = await getLogin(loginId, loginPwd);
     reqWeather("calgary");
     if (result.data.status === 1) {
+      //add user information into catch
+      Catch.user = result.data.data;
+      //add user information into localstorage
+      setUser(result.data.data);
+
       props.history.replace("/");
       message.success("Login Success!");
     } else {
       message.info("Username or Password not correct!");
     }
   };
-
+  if (getUser()) return <Redirect to="/" />;
   return (
     <div className="login_page">
       <div className="login">

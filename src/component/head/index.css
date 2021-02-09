@@ -29,3 +29,7 @@
 .header .lower span {
   margin-right: 10px;
 }
+.header .welcome {
+  color: tomato;
+  font-size: 18px;
+}

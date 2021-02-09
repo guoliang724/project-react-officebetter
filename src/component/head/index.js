@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { reqWeather } from "../../api/index";
 import LinkButton from "../../pages/linkbutton";
+import { Modal } from "antd";
+import { removeUser } from "../../util/storage";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import "./index.css";
+import { withRouter } from "react-router-dom";
 
-export default function Head() {
+function Head(props) {
   const [date, setCurrendate] = useState();
   const [city, setCity] = useState("Calgary");
   const [icon, setIcon] = useState(`http://openweathermap.org/img/w/10d.png`);
@@ -16,7 +20,16 @@ export default function Head() {
     }/${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
     setCurrendate(dateFormat);
   }, 1000);
-
+  const getCancel = () => {
+    Modal.confirm({
+      icon: <ExclamationCircleOutlined />,
+      content: "Do you want to logout?",
+      onOk: () => {
+        removeUser();
+        props.history.push("/login");
+      },
+    });
+  };
   useEffect(() => {
     async function getWeather() {
       const weather = await reqWeather(city);
@@ -25,21 +38,20 @@ export default function Head() {
         setIcon(icon);
         setMain(main);
       }
-      //   const { icon, main } = weather[0];
-
-      //   console.log(weather);
     }
     getWeather();
   }, [city]);
+
   return (
     <>
       <div className="logo"></div>
       <div className="dashboard">
         <div className="upper">
           <div>
-            <span>Welcome</span>
-            <span>admin</span>
-            <LinkButton>Exit</LinkButton>
+            <span>Welcome </span>
+            <span className="welcome">{props.username}</span>
+
+            <LinkButton onClick={getCancel}>Exit</LinkButton>
           </div>
         </div>
         <div className="lower">
@@ -56,3 +68,4 @@ export default function Head() {
     </>
   );
 }
+export default withRouter(Head);

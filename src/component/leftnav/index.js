@@ -29,7 +29,7 @@ export default class Leftnav extends Component {
     return (
       <div className="sidebar">
         <div className="logo">
-          <div className="role">Manager</div>
+          <div className="role">{this.props.role}</div>
           <div className="avatar">
             <Avatar />
           </div>

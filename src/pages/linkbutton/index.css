@@ -3,5 +3,5 @@
   background: transparent;
   color: #1890ff;
   cursor: pointer;
-  display: inline-block;
+  outline: none;
 }
