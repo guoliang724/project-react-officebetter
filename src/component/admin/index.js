@@ -1,6 +1,6 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
-import { Layout, Modal } from "antd";
+import { Layout } from "antd";
 import Main from "../main";
 import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
 import "./index.css";
@@ -16,11 +16,11 @@ export default class Homepage extends React.Component {
     user = jwt.decode(user);
     console.log("user", user);
     if (!user) return <Redirect to="/login" />;
-    const { role, username } = user;
+    const { role, username, imgUrl } = user;
     return (
       <Layout className="layout">
         <Sider>
-          <Leftnav role={role}></Leftnav>
+          <Leftnav role={role} imgUrl={imgUrl}></Leftnav>
         </Sider>
         <Layout className="main-layout">
           <Header className="header">

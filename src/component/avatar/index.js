@@ -2,9 +2,8 @@ import React from "react";
 
 import { Upload, message } from "antd";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-
 import "./index.css";
-
+import { getUser } from "../../util/storage";
 const api = "/upload";
 
 function getBase64(img, callback) {
@@ -16,6 +15,7 @@ function getBase64(img, callback) {
 export default class Avatar extends React.Component {
   state = {
     loading: false,
+    imageUrl: this.props.imageUrl,
   };
 
   handleChange = (info) => {
@@ -31,11 +31,15 @@ export default class Avatar extends React.Component {
           loading: false,
         })
       );
+      //notification of success
+      message.success("success!");
     }
   };
 
   render() {
     const { loading, imageUrl } = this.state;
+    //handle json web token
+    const token = getUser();
     const uploadButton = (
       <div>
         {loading ? <LoadingOutlined /> : <PlusOutlined />}
@@ -50,6 +54,7 @@ export default class Avatar extends React.Component {
         showUploadList={false}
         action={api}
         onChange={this.handleChange}
+        headers={{ user_id: token }}
       >
         {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
       </Upload>

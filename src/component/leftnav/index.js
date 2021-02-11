@@ -26,12 +26,13 @@ export default class Leftnav extends Component {
     });
   };
   render() {
+    const imageUrl = this.props.imgUrl;
     return (
       <div className="sidebar">
         <div className="logo">
           <div className="role">{this.props.role}</div>
           <div className="avatar">
-            <Avatar />
+            <Avatar imageUrl={imageUrl} />
           </div>
         </div>
         <Menu
