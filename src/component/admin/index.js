@@ -7,13 +7,14 @@ import "./index.css";
 import Leftnav from "../leftnav";
 import Head from "../head";
 import { getUser } from "../../util/storage";
-
+import jwt from "jsonwebtoken";
 const { Header, Content, Footer, Sider } = Layout;
 
 export default class Homepage extends React.Component {
   render() {
-    const user = getUser();
-
+    var user = getUser();
+    user = jwt.decode(user);
+    console.log("user", user);
     if (!user) return <Redirect to="/login" />;
     const { role, username } = user;
     return (
