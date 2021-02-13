@@ -7,9 +7,10 @@ import Invoices from "../../pages/invoices";
 import Customers from "../../pages/customers";
 import Users from "../../pages/users";
 import Roles from "../../pages/roles";
+import "./index.css";
 export default function Main() {
   return (
-    <div>
+    <div className="content-main">
       <Switch>
         <Route path="/home" component={Home} />
         <Route path="/quotes" component={Quotes} />

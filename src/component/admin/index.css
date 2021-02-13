@@ -9,3 +9,9 @@
   display: flex;
   flex-direction: row;
 }
+.ant-layout-content {
+  padding: 10px;
+}
+.ant-layout-footer {
+  padding: 10px;
+}

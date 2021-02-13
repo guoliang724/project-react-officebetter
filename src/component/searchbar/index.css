@@ -1,0 +1,11 @@
+.content-searchbar {
+  height: 40px;
+  background: transparent;
+  margin-bottom: 10px;
+}
+
+.content-searchbar .searchbar {
+  width: 300px;
+  margin-left: 10px;
+  margin-right: 30px;
+}

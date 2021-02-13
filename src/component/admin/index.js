@@ -8,6 +8,7 @@ import Leftnav from "../leftnav";
 import Head from "../head";
 import { getUser } from "../../util/storage";
 import jwt from "jsonwebtoken";
+import Searchbar from "../searchbar";
 const { Header, Content, Footer, Sider } = Layout;
 
 export default class Homepage extends React.Component {
@@ -26,7 +27,9 @@ export default class Homepage extends React.Component {
           <Header className="header">
             <Head username={username} />
           </Header>
+
           <Content className="content">
+            <Searchbar />
             <Main />
           </Content>
           <Footer style={{ textAlign: "center" }}>
