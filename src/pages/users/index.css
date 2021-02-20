@@ -1,0 +1,9 @@
+.settings-user{
+    margin-top: 2rem;
+    padding: 1rem;
+}
+.operate-button{
+    display: flex;
+    justify-content: space-evenly;
+    
+}

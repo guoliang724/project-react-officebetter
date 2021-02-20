@@ -15,5 +15,16 @@ export const reqWeather = async (city) => {
 
 //get the login information
 export function getLogin(loginId, loginPwd) {
-  return ajax("/login", { loginId, loginPwd }, "post");
+  return ajax("/user/login", { loginId, loginPwd }, "post");
+}
+
+//add user
+export function addUser(user) {
+  console.log("here");
+  return ajax("/user/add", user, "post");
+}
+
+//get the userlist information
+export function getUsers() {
+  return ajax("/user/users");
 }
