@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { Menu } from "antd";
 import { manuList } from "../../config/leftnav";
 import Avatar from "../avatar";
 import "./index.css";
 
 const { SubMenu, Item } = Menu;
-export default class Leftnav extends Component {
+class Leftnav extends Component {
   //iterate the manulist to get item nodes
   getNodes = (items) => {
     return items.map((item) => {
@@ -27,6 +27,8 @@ export default class Leftnav extends Component {
   };
   render() {
     const imageUrl = this.props.imgUrl;
+    const { pathname } = this.props.location;
+
     return (
       <div className="sidebar">
         <div className="logo">
@@ -40,6 +42,7 @@ export default class Leftnav extends Component {
           theme="dark"
           mode="inline"
           defaultSelectedKeys="/home"
+          selectedKeys={pathname}
         >
           {this.getNodes(manuList)}
         </Menu>
@@ -47,3 +50,5 @@ export default class Leftnav extends Component {
     );
   }
 }
+
+export default withRouter(Leftnav);

@@ -20,8 +20,15 @@ export function getLogin(loginId, loginPwd) {
 
 //add user
 export function addUser(user) {
-  console.log("here");
   return ajax("/user/add", user, "post");
+}
+//update user
+export function updateUser(id, loginId, loginPwd, email, role) {
+  return ajax("/user/update", { id, loginId, loginPwd, email, role }, "post");
+}
+//delete user
+export function deleteUser(id) {
+  return ajax("/user/delete", { id }, "post");
 }
 
 //get the userlist information
