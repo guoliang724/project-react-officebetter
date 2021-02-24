@@ -35,3 +35,13 @@ export function deleteUser(id) {
 export function getUsers() {
   return ajax("/user/users");
 }
+
+//adding a new role
+export function addRole(rolename) {
+  return ajax("/role/add", { rolename }, "post");
+}
+
+//getting the role lists
+export function getRoles() {
+  return ajax("/role/roles");
+}

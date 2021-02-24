@@ -63,6 +63,7 @@ export default function Users() {
               form1.setFieldsValue({
                 loginId: data.loginId,
                 loginPwd: data.loginPwd,
+                loginPwdConfirm: data.loginPwdConfirm,
                 email: data.email,
                 role: data.role,
               });
@@ -74,9 +75,8 @@ export default function Users() {
             type="primary"
             onClick={() => {
               setselectedData(data);
-              console.log(selectedData);
-              console.log(data);
-              showDeleteConfirm(selectedData.key);
+
+              showDeleteConfirm(data.key);
             }}
           >
             Delete
@@ -124,20 +124,24 @@ export default function Users() {
     confirm({
       title: "Are you sure delete this user?",
       icon: <ExclamationCircleOutlined />,
-      content: "Some descriptions",
+      content: "",
       okText: "Yes",
       okType: "danger",
       cancelText: "No",
-      onOk: async () => {
-        try {
-          const result = await deleteUser(id);
-          if (result.data.status === 1) message.success("success!");
-          else {
-            message.warn("failed");
-          }
-        } catch (err) {
-          message.error(err);
-        }
+      onOk() {
+        return new Promise((resolve, reject) => {
+          deleteUser(id)
+            .then((data) => {
+              if (data.data.status === 1) {
+                message.success("success!");
+                resolve();
+              }
+            })
+            .catch((err) => {
+              message.warn(err);
+              reject();
+            });
+        });
       },
       onCancel() {
         console.log("Cancel");
@@ -168,7 +172,7 @@ export default function Users() {
       <Card title={title} bordered>
         <Table
           style={{ width: "80%", margin: "0 auto" }}
-          rowKey="id"
+          rowKey="key"
           bordered
           dataSource={datas}
           columns={columns}
@@ -202,6 +206,28 @@ export default function Users() {
                   required: true,
                   message: "Required",
                 },
+              ]}
+            >
+              <Input.Password />
+            </Item>
+            <Item
+              label="ConfirmPwd"
+              name="loginPwdConfirm"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("loginPwd") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      "the two password that you entered do not match"
+                    );
+                  },
+                }),
               ]}
             >
               <Input.Password />
@@ -260,6 +286,28 @@ export default function Users() {
                   required: true,
                   message: "Required",
                 },
+              ]}
+            >
+              <Input.Password />
+            </Item>
+            <Item
+              label="ConfirmPwd"
+              name="loginPwdConfirm"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("loginPwd") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      "the two password that you entered do not match"
+                    );
+                  },
+                }),
               ]}
             >
               <Input.Password />
