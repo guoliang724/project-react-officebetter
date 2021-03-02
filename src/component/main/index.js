@@ -8,7 +8,7 @@ import Customers from "../../pages/customers";
 import Users from "../../pages/users";
 import Roles from "../../pages/roles";
 import "./index.css";
-export default function Main() {
+export default function Main(props) {
   return (
     <div className="content-main">
       <Switch>
@@ -18,7 +18,7 @@ export default function Main() {
         <Route path="/invoices" component={Invoices} />
         <Route path="/customers" component={Customers} />
         <Route path="/users" component={Users} />
-        <Route path="/roles" component={Roles} />
+        <Route path="/roles" render={() => <Roles {...props} />} />
         <Redirect to="/home"></Redirect>
       </Switch>
     </div>

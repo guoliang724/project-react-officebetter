@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "./index.css";
-import { Card, Table, Button, Modal, Form, Input, message } from "antd";
+import { Card, Table, Button, Modal, Form, Input, message, Select } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { addUser, getUsers, updateUser, deleteUser } from "../../api/index";
+import {
+  addUser,
+  getUsers,
+  updateUser,
+  deleteUser,
+  getRoles,
+} from "../../api/index";
 const { Item } = Form;
 const { confirm } = Modal;
+const { Option } = Select;
 export default function Users() {
   //form ref to control the adding form
   const [form] = Form.useForm();
@@ -20,6 +27,8 @@ export default function Users() {
   const [datas, setDatas] = useState([]);
   //the selected to be updated or deleted data
   const [selectedData, setselectedData] = useState({});
+  //the data of role list
+  const [roles, setRoles] = useState();
   const title = (
     <Button
       onClick={() => {
@@ -62,8 +71,8 @@ export default function Users() {
               setupdateShow(true);
               form1.setFieldsValue({
                 loginId: data.loginId,
-                loginPwd: data.loginPwd,
-                loginPwdConfirm: data.loginPwdConfirm,
+                loginPwd: "",
+                loginPwdConfirm: "",
                 email: data.email,
                 role: data.role,
               });
@@ -74,9 +83,11 @@ export default function Users() {
           <Button
             type="primary"
             onClick={() => {
+              console.log("untile", datas);
               setselectedData(data);
-
+              setdeleteShow(true);
               showDeleteConfirm(data.key);
+              console.log("key", data.key);
             }}
           >
             Delete
@@ -91,10 +102,13 @@ export default function Users() {
     if (validResult.errorFields && validResult.errorFields.length > 0) return;
     const value = form.getFieldsValue();
     const { loginId, loginPwd, email, role } = value;
+    console.log("value", value);
     const result = await addUser({ loginId, loginPwd, email, role });
     if (result.data.status === 1) {
       message.success("Success!");
+      console.log("datas---", result.data.data);
       setDatas([...datas, result.data.data]);
+      console.log("after", datas);
       setAddShow(false);
     }
   };
@@ -130,10 +144,14 @@ export default function Users() {
       cancelText: "No",
       onOk() {
         return new Promise((resolve, reject) => {
+          //cannot get the latest created item's id
+          if (!id) id = datas[datas.length - 1].id;
           deleteUser(id)
             .then((data) => {
               if (data.data.status === 1) {
                 message.success("success!");
+                setdeleteShow(false);
+                console.log("id--", id);
                 resolve();
               }
             })
@@ -149,8 +167,11 @@ export default function Users() {
     });
   };
 
-  //handle ajax side effect
+  //handle role menu
+
+  //get users information for table using
   useEffect(() => {
+    console.log("n词");
     getUsers()
       .then((data) => {
         const datas = data.data.data.map((item) => {
@@ -166,13 +187,26 @@ export default function Users() {
       .catch((error) => {
         console.log(error);
       });
-  }, [datas]);
+    console.log("xxx");
+  }, [setDatas, updateShow, deleteShow, selectedData]);
+
+  //get the roles information for table using
+  useEffect(() => {
+    getRoles().then((data) => {
+      console.log(data);
+      var result = data.data.data.map((item) => (
+        <Option key={item.rolename}>{item.rolename}</Option>
+      ));
+      console.log("result", result);
+      setRoles(result);
+    });
+  }, []);
   return (
     <div className="settings-user">
       <Card title={title} bordered>
         <Table
           style={{ width: "80%", margin: "0 auto" }}
-          rowKey="key"
+          rowKey="id"
           bordered
           dataSource={datas}
           columns={columns}
@@ -255,7 +289,9 @@ export default function Users() {
                 },
               ]}
             >
-              <Input />
+              <Select showSearch placeholder="Select A Role">
+                {roles}
+              </Select>
             </Item>
           </Form>
         </Modal>
@@ -335,7 +371,9 @@ export default function Users() {
                 },
               ]}
             >
-              <Input />
+              <Select showSearch placeholder="Select A Role">
+                {roles}
+              </Select>
             </Item>
           </Form>
         </Modal>

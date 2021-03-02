@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "./index.css";
 import { Card, Table, Button, Modal, Form, Input, message, Tree } from "antd";
-import { addRole, getRoles } from "../../api/index";
+import { addRole, getRoles, updateRoles } from "../../api/index";
 import { manuList } from "../../config/leftnav";
+import moment from "moment";
 const { Item } = Form;
 
-export default function Roles() {
+export default function Roles(props) {
   //handling datas of role
   const [datas, setDatas] = useState([]);
   //control the adding form status
@@ -16,7 +17,7 @@ export default function Roles() {
   //handle the selected row
   const [row, setRow] = useState({});
   //handle the menu of the selected row
-  const [selectedRowMenu, setselectedRowMenu] = useState([]);
+  const [onSelected, setonSelected] = useState([]);
   //the added role name
   const columns = [
     {
@@ -26,18 +27,24 @@ export default function Roles() {
     },
     {
       title: "Creat Time",
-      dataIndex: "createtime",
-      key: "createtime",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (time) => {
+        return moment(time).format("YYYY-MM-DD");
+      },
     },
     {
       title: "Authorized Time",
-      dataIndex: "authorizedtime",
-      key: "authorizedtime",
+      dataIndex: "authTime",
+      key: "authTime",
+      render: (time) => {
+        return time ? moment(time).format("YYYY-MM-DD") : "";
+      },
     },
     {
       title: "Authorizor",
-      dataIndex: "authorizor",
-      key: "authorizor",
+      dataIndex: "authAuthor",
+      key: "authAuthor",
     },
   ];
 
@@ -47,7 +54,7 @@ export default function Roles() {
       return {
         title: item.content,
         key: item.key,
-        children: item.children ? getTreeNodes(item.children) : "",
+        children: item.children ? getTreeNodes(item.children) : [],
       };
     });
   };
@@ -61,13 +68,28 @@ export default function Roles() {
   ];
 
   //handle tree component(settings for role)
-  const handleTree = () => {};
+  const handleTree = async () => {
+    const validResult = await form.validateFields();
+    if (validResult.errorFields && validResult.errorFields.length > 0) return;
+    const id = row.id;
+    const menus = onSelected;
+    const authTime = moment().format("YYYY-MM-DD ");
+    const authAuthor = props.role;
+    const result = await updateRoles(id, menus, authTime, authAuthor);
+    if (result.data.status === 1) {
+      message.success("success!");
+      setmodifyShow(false);
+    }
+  };
   //handle onrow callback function in table settings
   const handleonRow = (record, index) => {
     return {
       onClick: () => {
         setRow(record);
-        console.log(row.rolename);
+
+        var filteredRow = datas.filter((item) => item.id === record.id);
+
+        setonSelected(filteredRow[0].menus);
       },
     };
   };
@@ -91,6 +113,10 @@ export default function Roles() {
   const handleCancle = () => {
     setaddingShow(false);
     setmodifyShow(false);
+  };
+
+  const handleOnselected = (checkedKeys) => {
+    setonSelected(checkedKeys);
   };
 
   //the title of card component
@@ -127,8 +153,8 @@ export default function Roles() {
       .catch((err) => {
         message.warn(err);
       });
-    console.log("navlist", manuList);
-  }, []);
+    console.log("sxx");
+  }, [datas.length]);
 
   return (
     <Card title={title} bordered>
@@ -140,6 +166,8 @@ export default function Roles() {
           selectedRowKeys: [row.id],
           onChange: (rowkeys, rows) => {
             setRow(rows[0]);
+            var filteredRow = datas.filter((item) => item.id === rows[0].id);
+            setonSelected(filteredRow[0].menus);
           },
         }}
         onRow={handleonRow}
@@ -172,12 +200,18 @@ export default function Roles() {
         onOk={handleTree}
         onCancel={handleCancle}
       >
-        <Form>
+        <Form form={form}>
           <Item label="Role:" wrapperCol={{ span: 18 }}>
             <Input disabled value={row.rolename} />
           </Item>
         </Form>
-        <Tree checkable treeData={treeDatas} autoExpandParent={true}></Tree>
+        <Tree
+          checkable
+          treeData={treeDatas}
+          checkedKeys={onSelected}
+          onCheck={handleOnselected}
+          defaultExpandAll={true}
+        ></Tree>
       </Modal>
     </Card>
   );

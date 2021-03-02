@@ -45,3 +45,8 @@ export function addRole(rolename) {
 export function getRoles() {
   return ajax("/role/roles");
 }
+
+//updating role
+export function updateRoles(id, menus, authTime, authAuthor) {
+  return ajax("/role/update", { id, menus, authTime, authAuthor }, "post");
+}
